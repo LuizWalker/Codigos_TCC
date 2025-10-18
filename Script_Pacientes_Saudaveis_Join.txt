@@ -1,0 +1,33 @@
+import os
+import shutil
+
+# Defina o caminho para a sua pasta principal (onde estão as subpastas dos pacientes)
+pasta_principal = 'C:/Seu/Caminho/Para/As/Pastas/Dos/Pacientes'
+
+# Defina o caminho para a pasta única onde as imagens serão salvas
+pasta_unica_destino = 'C:/Seu/Caminho/Para/A/Pasta/Unica'
+
+# Se a pasta de destino não existir, crie-a
+if not os.path.exists(pasta_unica_destino):
+    os.makedirs(pasta_unica_destino)
+
+# Percorre todas as subpastas dentro da pasta principal
+for id_paciente in os.listdir(pasta_principal):
+    caminho_paciente = os.path.join(pasta_principal, id_paciente)
+
+    # Garante que estamos lidando com uma pasta e não um arquivo
+    if os.path.isdir(caminho_paciente):
+        # Percorre os arquivos dentro da pasta do paciente
+        for nome_arquivo in os.listdir(caminho_paciente):
+            # Verifica se o arquivo é um .dcm
+            if nome_arquivo.endswith('.dcm'):
+                caminho_origem = os.path.join(caminho_paciente, nome_arquivo)
+
+                # Cria o novo nome do arquivo: ID_nomeoriginal.dcm
+                novo_nome = f'{id_paciente}_{nome_arquivo}'
+                caminho_destino = os.path.join(pasta_unica_destino, novo_nome)
+
+                # Move e renomeia o arquivo
+                shutil.move(caminho_origem, caminho_destino)
+
+print('Todas as imagens foram movidas e renomeadas com sucesso!')
